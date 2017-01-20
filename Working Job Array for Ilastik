@@ -1,0 +1,32 @@
+#!/bin/bash -vl
+#PBS -l nodes=1:ppn=2
+#PBS -l walltime=1:00:00
+#PBS -t 282
+#PBS -q batch 
+#PBS -N TestJobArray
+
+
+module load ilastik
+
+cd /hpcdata/sms/GlomerularIdentification/QSUB_IMAGE_DATA/TestJobarray/${PBS_ARRAYID}
+
+function headless_ilastik {
+name=${1##*\/}
+cd $1uyfd
+ls *.tif -l -m1 | xargs -n1 -I{} echo $PWD'/'{} > /hpcdata/sms/GlomerularIdentification'/INPUT_FILES/'$name'.list'
+
+run_ilastik.sh --headless \
+	--project='/hpcdata/sms/GlomerularIdentification/QSUB_BASE/GlomIDDec2017.ilp' \
+	--export_source="Simple Segmentation" \
+	--output_format=tiff \
+	--output_filename_format={dataset_dir}/{nickname}"_Simple Segmentation.tiff" \
+	$( cat /hpcdata/sms/GlomerularIdentification'/INPUT_FILES/'$name'.list' )
+}
+export -f headless_ilastik
+
+cd /hpcdata/sms/GlomerularIdentification/QSUB_IMAGE_DATA/TestJobarray/${PBS_ARRAYID}
+ls *.tif -l -m1 | xargs -n1 >tiffs
+
+for i in tiffs ;do 
+	headless_ilastik /hpcdata/sms/GlomerularIdentification/QSUB_IMAGE_DATA/TestJobarray/${PBS_ARRAYID}
+done
