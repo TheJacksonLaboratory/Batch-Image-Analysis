@@ -92,56 +92,39 @@ for (f=0; f<list.length; f++) {
 			run("Make Binary");
 			print("Make binary");
 			run("Analyze Particles...", "size=4000-Infinity");
+			Overlay.copy
 			print("Ananlyze particles function ran");
-			select("Summary");
-			text = getInfo("window.contents");
-   			lines = split(text, "\n");
-for (i=1; i<lines.length; i++) {
-      items=split(lines[i], "\t");
-      print(i)
-        
-			print("ROI_number=" + i); 
-				//roiManager("Rename",tt+"roi"+n);
-
-				
-					if (overlay("count")>0) {
-						overlay("Save", dir[2] + tt +"roi"+n +".zip");
-						for (j=0; j<i; j++) {
-					
-							overlay("Select", j);
-
-							path2=dir[1]+FS+list2[f]; 
-							print("Name of path reading files from dir[1]",path2);   
-							//if (!endsWith(path2,"/")) open(path2); // This will open all files in folder
-							//if (startsWith(path2,tt+".tif")) { 
-							if (indexOf(path2,tt)>0) {
-							//if (1) {
-					 		open(path2); // this should only open matching file
-													
-							run("RGB Color");
-							print("name of filefor dir2RGBrun step",tt);
-							run("HSB Stack");
-							run("Stack to Images");
-							selectWindow("Saturation");
-							rename(t+ "Saturation");
-							setThreshold(80, 255);
-							roiManager("Select",i );
-							run("Measure");
-						} else {
-								print ("FILEName_ERROR");
-							}
-					}
-						roiManager("Deselect");
-						roiManager("Delete");            // Closes a loop.  Note there are as many } as there are { in the code, and each } is on it's own line
+			path2=dir[1]+FS+list2[f]; 
+			print("Name of path reading files from dir[1]",path2);   
+			if (indexOf(path2,tt)>0) {
+			open(path2); 
+			run("RGB Color");
+			print("name of filefor dir2RGBrun step",tt);
+			run("HSB Stack");
+			run("Stack to Images");
+			selectWindow("Saturation");
+			rename(t+ "Saturation");
+			setThreshold(80, 255);
+			Overlay.paste
+			run("Measure");
+			for (i=0;i<Overlay.size;i++){			
+				Overlay.activateSelection(i);
+				List.setMeasurements;
+				var1=getResult("%Area",nResults-1);
+				print( "Number of Var ",tt,"\t",var1);
 						}
-			} 
-    
-	selectWindow("Results");
-	saveAs(dir[2]+"GlomareaandMME.csv");
-	selectWindow("Log");
-	saveAs(dir[2]+"runlog.txt");
+			}else 
+			print(error);										
+							saveAs("Results",dir[2]+tt+"MME.csv");
+}
+						
+							}
+					
+						Overlay.clear;
+		
+				
+	
 
-	// END processing per image
 
 
 
