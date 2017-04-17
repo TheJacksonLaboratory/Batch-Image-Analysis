@@ -1,0 +1,7 @@
+#!/usr/bin/env bash 
+#PBS -l nodes=1:ppn=20,walltime=72:00:00
+
+module load Fiji-ImageJ/20161104
+/opt/compsci/Fiji-ImageJ/20161104/ImageJ-linux64 -macro /hpcdata/sms/GlomerularIdentification/QSUB_BASE/MMEMacros/Far2.ijm 'dir1=/hpcdata/sms/NDPtoTIff/131212M/305/Segments/ dir2=/hpcdata/sms/NDPtoTIff/131212M/305/Images/ dir3=/hpcdata/sms/NDPtoTIff/131212M/305/Out2/'
+
+find -name "*MME.csv" | xargs -n1 -I{} sh -c "cat {} | tail -n +2 >> 305new.csv"
