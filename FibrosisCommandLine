@@ -1,0 +1,81 @@
+arg = getArgument()
+print("Full argument" +arg)
+dir=split(arg," "); 
+
+FS="/";
+
+for (i=0; i<dir.length; i++) {
+     //print(substring(dir[i],5));
+     addToArray(substring(dir[i],5), dir, i);
+     print(dir[i]);
+}
+
+File.saveString("File,Mean\n",dir[1]+"fibrosis.csv");	
+
+list = getFileList(dir[0]); 
+
+setBatchMode(true); 
+
+for (f=0; f<list.length; f++) 
+{
+	path = dir[0]+list[f]; 
+ 	if (!endsWith(path,"/")) open(path);
+ 	t=getTitle(); 
+	run("Duplicate...", " ");
+	
+	rename(t);
+	run("Set Measurements...", "area mean centroid center area_fraction display redirect=None decimal=1");
+	run("Measure");
+	var1=getResult("Mean",nResults-1);
+	print(var1);
+	File.append(t+","+var1,dir[1]+"fibrosis.csv");	
+	
+	selectWindow(t);
+	run("Brightness/Contrast...");
+	run("Enhance Contrast", "saturated=0.35");
+	run("RGB Stack");
+	run("Stack to Images");
+	imageCalculator("Divide create", "Blue","Red"); 
+	run("Brightness/Contrast...");
+	rename(t);
+	run("Enhance Contrast", "saturated=0.35");
+	run("Subtract...", "value=1.2");
+	run("Multiply...", "value=10000000");
+	run("Brightness/Contrast...");
+	run("Enhance Contrast", "saturated=0.35");
+	run("Max...", "value=1");
+	run("Min...", "value=0");
+	run("Measure");
+	var2=getResult("%Area",nResults-1);
+	print(var2);
+	File.append(t+"Fib"+","+var2,dir[1]+"fibrosis.csv");	
+
+							
+}
+
+
+function addToArray(value, array, position) {
+	if (position<lengthOf(array)) {
+		array[position]=value;
+	} else {
+		temparray=newArray(position+1);
+		for (i=0; i<lengthOf(array); i++) {
+			temparray[i]=array[i];
+		}
+		temparray[position]=value;
+		array=temparray;
+	}
+	return array;
+}
+
+//Appends the value to the array
+//Returns the modified array
+function appendToArray(value, array) {
+	temparray=newArray(lengthOf(array)+1);
+	for (i=0; i<lengthOf(array); i++) {
+		temparray[i]=array[i];
+	}
+	temparray[lengthOf(temparray)-1]=value;
+	array=temparray;
+	return array;
+}
