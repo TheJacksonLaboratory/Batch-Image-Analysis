@@ -1,0 +1,3 @@
+java -Djava.awt.headless=true
+
+~/Downloads/Fiji.app/Contents/MacOS/ImageJ-macosx --headless -macro ~/Desktop/Fibrosistest/fibrosisCommandLine.ijm 'dir1=/Users/sms/Desktop/As352/ dir2=/Users/sms/Desktop/ComandLine'
