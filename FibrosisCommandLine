@@ -38,6 +38,11 @@ for (f=0; f<list.length; f++)
 	imageCalculator("Divide create", "Blue","Red"); 
 	run("Brightness/Contrast...");
 	rename(t);
+	selectWindow("Red");
+	close();
+	selectWindow("Blue");
+	close();
+	selectWindow(t);
 	run("Enhance Contrast", "saturated=0.35");
 	run("Subtract...", "value=1.2");
 	run("Multiply...", "value=10000000");
