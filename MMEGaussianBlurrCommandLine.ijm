@@ -14,6 +14,8 @@ print("Execute batch from directory: "+dir[0]);
 print("Execute batch from directory: "+dir[1]);
 print("Execute batch from directory: "+dir[2]);
 
+File.saveString("File,Mean\n",dir[2]+"MME.csv");
+
 print("start directoryQC outside loop");
 
 list = getFileList(dir[0]);  // gives ImageJ a list of all files in the folder to work through
@@ -118,7 +120,9 @@ for (f=0; f<list.length; f++)
 			{			
 				Overlay.activateSelection(i);
 				List.setMeasurements;
+				run("Measure");
 				var1=getResult("%Area",nResults-1);
+				File.append(t+"Fib"+","+var2,dir[2]+""MME.csv"
 				print( "Number of Var ",tt,"\t",var1);
 			}
 		}
