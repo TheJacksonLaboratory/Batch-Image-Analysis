@@ -115,10 +115,11 @@ for (f=0; f<list.length; f++)
 			rename(t+ "Saturation");
 			setThreshold(90, 255);
 			Overlay.paste
-			run("Measure");
+			//run("Measure");
 			for (i=0;i<Overlay.size;i++)
 			{			
 				Overlay.activateSelection(i);
+				run("Set Measurements...", "area mean centroid center area_fraction display redirect=None decimal=1");
 				List.setMeasurements;
 				run("Measure");
 				var1=getResult("%Area",nResults-1);
