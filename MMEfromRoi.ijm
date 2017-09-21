@@ -33,13 +33,16 @@ run("Stack to Images");
 selectWindow("Saturation");
 rename(t+ "Saturation");
 setThreshold(100, 255);
+roiManager("Open",dir3 +t+".zip");
 n=roiManager("count");
 for (i=0; i<n; i++) {
-roiManager("Open",dir3 +t+"_Simple Segmentation.tiff"+i+".zip");
 roiManager("select",t +i);
+run("Set Measurements...", "area mean standard modal min centroid center perimeter bounding fit shape feret's integrated median skewness kurtosis area_fraction stack display redirect=None decimal=1");
 run("Measure");
 
 }
+roiManager("Deselect");
+roiManager("Delete");
 }
     }
 selectWindow("Results");
