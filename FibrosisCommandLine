@@ -51,7 +51,7 @@ for (f=0; f<list.length; f++)
 	run("Max...", "value=1");
 	run("Min...", "value=0");
 	run("Measure");
-	var2=getResult("%Area",nResults-1);
+	var2=getResult("Mean",nResults-1);
 	print(var2);
 	File.append(t+"Fib"+","+var2,dir[1]+"fibrosis.csv");	
 
